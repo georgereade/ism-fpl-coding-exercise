@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import PlayerCard from "./PlayerCard";
 
+// Instructs typescript on what types to expect for the Player and Team objects
 interface Player {
   web_name: string;
   goals_scored: number;
@@ -31,10 +32,19 @@ const LoadPlayersButton = styled.button`
 `;
 
 export default function Data() {
+  // Holds player and team data, as well as boolean logic to indicate data has been loaded
   const [playerData, setPlayerData] = useState<Player[]>([]);
   const [teamData, setTeamData] = useState<Team[]>([]);
   const [loaded, setLoaded] = useState(false);
 
+  // Function to sort players by goals + assists
+  const sortPlayersByGoalsAndAssists = (players: Player[]) => {
+    return players.sort(
+      (a, b) => b.goals_scored + b.assists - (a.goals_scored + a.assists)
+    );
+  };
+
+  // Fetch function triggered by button press
   const fetchTeamsData = () => {
     fetch("https://cors-proxy-90954623675.europe-west1.run.app/", {
       method: "GET",
@@ -50,87 +60,97 @@ export default function Data() {
         return response.json();
       })
       .then((data) => {
-        setPlayerData(data.elements);
-        setTeamData(data.teams);
-        setLoaded(true);
+        // Sort players by goals and assists
+        const sortedPlayerData = sortPlayersByGoalsAndAssists(data.elements);
+
+        setPlayerData(sortedPlayerData); // Stored the sorted players
+        setTeamData(data.teams); // Store the team data
+        setLoaded(true); // Indicate that data is loaded
       })
       .catch((error) => {
         console.error("There was an issue with the fetch:", error);
       });
   };
 
-  // Helper function to sort players by goals + assists
-  const sortPlayersByGoalsAndAssists = (players: Player[]) => {
-    return players.sort(
-      (a, b) => b.goals_scored + b.assists - (a.goals_scored + a.assists)
-    );
-  };
-
-  // Filter and sort player data by position type
-  const goalkeepers = sortPlayersByGoalsAndAssists(
-    playerData.filter((player) => player.element_type === 1)
-  );
-  const defenders = sortPlayersByGoalsAndAssists(
-    playerData.filter((player) => player.element_type === 2)
-  );
-  const midfielders = sortPlayersByGoalsAndAssists(
-    playerData.filter((player) => player.element_type === 3)
-  );
-  const forwards = sortPlayersByGoalsAndAssists(
-    playerData.filter((player) => player.element_type === 4)
-  );
+  const Title = styled.h1`
+    font-size: 1.5em;
+    padding: 4px 0px 8px 0px;
+    margin-bottom: 8px;
+    width: fit-content;
+    text-align: center;
+    background-color: white;
+  `;
 
   return (
     <div>
       {!loaded ? (
-        <LoadPlayersButton onClick={fetchTeamsData}>
-          Click to reveal the stars of the season so far!
-        </LoadPlayersButton>
+        <div>
+          <Title>Welcome to FPL's Magnificent Seven</Title>
+          <LoadPlayersButton onClick={fetchTeamsData}>
+            Click to reveal the stars of the season so far!
+          </LoadPlayersButton>
+        </div>
       ) : (
-        <div className="flex flex-col gap-8">
-          {/* Row for Goalkeepers (limit 1) */}
-          <div className="flex flex-wrap justify-center">
-            {goalkeepers.slice(0, 1).map((player) => (
-              <PlayerCard
-                key={player.code}
-                player={player}
-                teamData={teamData}
-              />
-            ))}
-          </div>
+        <div className="flex flex-col w-screen gap-4">
+          {playerData.length > 0 && (
+            <>
+              {/* Row for Goalkeepers (limit 1) */}
+              <div className="flex justify-center">
+                {playerData
+                  .filter((player) => player.element_type === 1)
+                  .slice(0, 1)
+                  .map((player) => (
+                    <PlayerCard
+                      key={player.code}
+                      player={player}
+                      teamData={teamData}
+                    />
+                  ))}
+              </div>
 
-          {/* Row for Defenders (limit 2) */}
-          <div className="flex flex-wrap justify-center gap-4">
-            {defenders.slice(0, 2).map((player) => (
-              <PlayerCard
-                key={player.code}
-                player={player}
-                teamData={teamData}
-              />
-            ))}
-          </div>
+              {/* Row for Defenders (limit 2) */}
+              <div className="flex justify-around gap-2">
+                {playerData
+                  .filter((player) => player.element_type === 2)
+                  .slice(0, 2)
+                  .map((player) => (
+                    <PlayerCard
+                      key={player.code}
+                      player={player}
+                      teamData={teamData}
+                    />
+                  ))}
+              </div>
 
-          {/* Row for Midfielders (limit 3) */}
-          <div className="flex flex-wrap justify-center gap-4">
-            {midfielders.slice(0, 3).map((player) => (
-              <PlayerCard
-                key={player.code}
-                player={player}
-                teamData={teamData}
-              />
-            ))}
-          </div>
+              {/* Row for Midfielders (limit 3) */}
+              <div className="flex justify-around gap-2">
+                {playerData
+                  .filter((player) => player.element_type === 3)
+                  .slice(0, 3)
+                  .map((player) => (
+                    <PlayerCard
+                      key={player.code}
+                      player={player}
+                      teamData={teamData}
+                    />
+                  ))}
+              </div>
 
-          {/* Row for Forwards (limit 1) */}
-          <div className="flex flex-wrap justify-center gap-4">
-            {forwards.slice(0, 1).map((player) => (
-              <PlayerCard
-                key={player.code}
-                player={player}
-                teamData={teamData}
-              />
-            ))}
-          </div>
+              {/* Row for Forwards (limit 1) */}
+              <div className="flex justify-center gap-2">
+                {playerData
+                  .filter((player) => player.element_type === 4)
+                  .slice(0, 1)
+                  .map((player) => (
+                    <PlayerCard
+                      key={player.code}
+                      player={player}
+                      teamData={teamData}
+                    />
+                  ))}
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>

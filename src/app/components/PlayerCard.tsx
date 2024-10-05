@@ -43,7 +43,7 @@ export default function PlayerCard({ player, teamData }: PlayerCardProps) {
 
   return (
     <div
-      className="relative w-[200px] h-[150px] cursor-pointer rounded-xl hover:scale-105 transition ease-linear"
+      className="relative w-[120px] h-[150px] sm:w-[150px] sm:h-[170px] md:w-[200px] md:h-[200px] cursor-pointer rounded-xl hover:scale-105 transition ease-linear"
       onClick={() => handleCardClick(player.code)}
     >
       <motion.div
@@ -60,18 +60,17 @@ export default function PlayerCard({ player, teamData }: PlayerCardProps) {
           <Card className="flex flex-col h-full items-center bg-white shadow-2xl rounded-xl">
             <CardHeader className="flex flex-col w-full px-2 font-bold">
               <p className="uppercase">{player.web_name}</p>
-              <p className="text-xs">
-                <span className="px-1 rounded-md text-lightblue bg-darkblue rounded-t-none">
+              <div className="text-xs w-full sm:justify-between sm:flex flex-col sm:flex-row">
+                <p className="px-1 rounded-md text-lightblue bg-darkblue rounded-t-none w-fit">
                   {getPosition(player.element_type)}
-                </span>{" "}
-                {getTeamName(player.team_code)}
-              </p>
+                </p>{" "}
+                <p>{getTeamName(player.team_code)}</p>
+              </div>
             </CardHeader>
             <Image
-              className="object-cover"
+              className="object-cover h-[80px] sm:h-[120px] md:h-[150px]"
               alt={player.web_name}
               width="auto"
-              height={100}
               src={
                 "https://resources.premierleague.com/premierleague/photos/players/110x140/p" +
                 player.code +
@@ -80,7 +79,7 @@ export default function PlayerCard({ player, teamData }: PlayerCardProps) {
             />
             <CardFooter className="px-2 text-center w-full justify-center">
               <p className="text-black -translate-y-4 z-10">
-                <span className="text-orange-600 font-bold bg-white ">
+                <span className="text-orange-600 text-xs sm:text-base font-bold bg-white ">
                   Magnificance: {player.goals_scored + player.assists}
                 </span>
               </p>
