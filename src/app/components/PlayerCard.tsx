@@ -1,6 +1,7 @@
 import { Card, CardFooter, Image, CardHeader } from "@nextui-org/react";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { IconBallFootball, IconSoccerField } from "@tabler/icons-react";
 
 interface PlayerCardProps {
   player: {
@@ -12,9 +13,14 @@ interface PlayerCardProps {
     team_code: number;
   };
   teamData: { code: number; name: string }[];
+  isMagnificent: boolean;
 }
 
-export default function PlayerCard({ player, teamData }: PlayerCardProps) {
+export default function PlayerCard({
+  player,
+  teamData,
+  isMagnificent,
+}: PlayerCardProps) {
   const [flippedCards, setFlippedCards] = useState<{ [key: string]: boolean }>(
     {}
   );
@@ -43,23 +49,27 @@ export default function PlayerCard({ player, teamData }: PlayerCardProps) {
 
   return (
     <div
-      className="relative w-[120px] h-[150px] sm:w-[150px] sm:h-[170px] md:w-[200px] md:h-[200px] cursor-pointer rounded-xl hover:scale-105 transition ease-linear"
+      className="relative w-[120px] h-[150px] sm:w-[150px] sm:h-[170px] md:w-[200px] md:h-[200px] cursor-pointer rounded-xl hover:scale-105 transition ease-linear mx-1"
       onClick={() => handleCardClick(player.code)}
     >
       <motion.div
         className="absolute w-full h-full"
-        animate={{ rotateY: flippedCards[player.code] ? 180 : 0 }}
+        animate={{ rotateX: flippedCards[player.code] ? 180 : 0 }}
         transition={{ duration: 0.6 }}
         style={{ transformStyle: "preserve-3d" }}
       >
         {/* Front Side */}
         <div
-          className="absolute w-full rounded-xl h-full backface-hidden"
+          className={`absolute w-full rounded-xl h-full backface-hidden ${
+            isMagnificent ? "shadow-xl shadow-amber-400" : ""
+          }`}
           style={{ backfaceVisibility: "hidden" }}
         >
           <Card className="flex flex-col h-full items-center bg-white shadow-2xl rounded-xl">
             <CardHeader className="flex flex-col w-full px-2 font-bold">
-              <p className="uppercase">{player.web_name}</p>
+              <p className="uppercase text-sm sm:text-base">
+                {player.web_name}
+              </p>
               <div className="text-xs w-full sm:justify-between sm:flex flex-col sm:flex-row">
                 <p className="px-1 rounded-md text-lightblue bg-darkblue rounded-t-none w-fit">
                   {getPosition(player.element_type)}
@@ -77,10 +87,10 @@ export default function PlayerCard({ player, teamData }: PlayerCardProps) {
                 ".png"
               }
             />
-            <CardFooter className="px-2 text-center w-full justify-center">
-              <p className="text-black -translate-y-4 z-10">
-                <span className="text-orange-600 text-xs sm:text-base font-bold bg-white ">
-                  Magnificance: {player.goals_scored + player.assists}
+            <CardFooter className="px-0 z-10 -translate-y-1 md:-translate-y-3 text-center w-full justify-center bg-orange-600 rounded-xl rounded-t-none">
+              <p className="text-black ">
+                <span className="text-white text-xs md:text-base font-bold">
+                  {player.goals_scored + player.assists} Magnificence
                 </span>
               </p>
             </CardFooter>
@@ -89,13 +99,24 @@ export default function PlayerCard({ player, teamData }: PlayerCardProps) {
 
         {/* Back Side */}
         <div
-          className="absolute h-full w-full rounded-md backface-hidden"
-          style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
+          className="relative w-[120px] h-[150px] sm:w-[150px] sm:h-[170px] md:w-[200px] md:h-[200px] rounded-md backface-hidden"
+          style={{ transform: "rotateX(180deg)", backfaceVisibility: "hidden" }}
         >
-          <Card className="flex flex-col h-full items-center bg-gray-800 text-white shadow-2xl rounded-xl">
+          <Card
+            className={`h-full w-full bg-gray-800 text-white shadow-2xl rounded-xl flex flex-col justify-center my-auto ${
+              isMagnificent ? "bg-amber-400 " : ""
+            }"`}
+          >
             <CardFooter className="px-2 text-center flex flex-col place-content-center items-center justify-center">
-              <p>Goals: {player.goals_scored}</p>
-              <p>Assists: {player.assists}</p>
+              <p>
+                <IconBallFootball className="mx-auto text-white" size={40} />
+                {player.goals_scored} Goals
+              </p>
+
+              <p>
+                <IconSoccerField className="mx-auto text-white" size={40} />
+                {player.assists} Assists
+              </p>
             </CardFooter>
           </Card>
         </div>

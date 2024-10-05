@@ -31,17 +31,35 @@ const LoadPlayersButton = styled.button`
   }
 `;
 
+const Title = styled.h1`
+  font-size: 1.5em;
+  padding: 4px 0px 8px 0px;
+  margin-bottom: 8px;
+  width: fit-content;
+  text-align: center;
+  background-color: white;
+`;
+
 export default function Data() {
   // Holds player and team data, as well as boolean logic to indicate data has been loaded
   const [playerData, setPlayerData] = useState<Player[]>([]);
   const [teamData, setTeamData] = useState<Team[]>([]);
   const [loaded, setLoaded] = useState(false);
 
-  // Function to sort players by goals + assists
+  // Function to sort players by goals + assists. If tied, the player with more goals wins
   const sortPlayersByGoalsAndAssists = (players: Player[]) => {
-    return players.sort(
-      (a, b) => b.goals_scored + b.assists - (a.goals_scored + a.assists)
-    );
+    return players.sort((a, b) => {
+      const aTotal = a.goals_scored + a.assists;
+      const bTotal = b.goals_scored + b.assists;
+
+      // First compare by total goals + assists
+      if (bTotal !== aTotal) {
+        return bTotal - aTotal;
+      }
+
+      // If tied, compare by goals scored
+      return b.goals_scored - a.goals_scored;
+    });
   };
 
   // Fetch function triggered by button press
@@ -72,14 +90,10 @@ export default function Data() {
       });
   };
 
-  const Title = styled.h1`
-    font-size: 1.5em;
-    padding: 4px 0px 8px 0px;
-    margin-bottom: 8px;
-    width: fit-content;
-    text-align: center;
-    background-color: white;
-  `;
+  // Calculate the maximum magnificence
+  const maxMagnificence = Math.max(
+    ...playerData.map((player) => player.goals_scored + player.assists)
+  );
 
   return (
     <div>
@@ -104,6 +118,9 @@ export default function Data() {
                       key={player.code}
                       player={player}
                       teamData={teamData}
+                      isMagnificent={
+                        player.goals_scored + player.assists === maxMagnificence
+                      }
                     />
                   ))}
               </div>
@@ -118,6 +135,9 @@ export default function Data() {
                       key={player.code}
                       player={player}
                       teamData={teamData}
+                      isMagnificent={
+                        player.goals_scored + player.assists === maxMagnificence
+                      }
                     />
                   ))}
               </div>
@@ -132,6 +152,9 @@ export default function Data() {
                       key={player.code}
                       player={player}
                       teamData={teamData}
+                      isMagnificent={
+                        player.goals_scored + player.assists === maxMagnificence
+                      }
                     />
                   ))}
               </div>
@@ -146,6 +169,9 @@ export default function Data() {
                       key={player.code}
                       player={player}
                       teamData={teamData}
+                      isMagnificent={
+                        player.goals_scored + player.assists === maxMagnificence
+                      }
                     />
                   ))}
               </div>
