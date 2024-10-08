@@ -52,7 +52,10 @@ export default function InfoPopup() {
               midfielders and one forward
             </li>
             <li>Tap the player card to show goal and assist totals</li>
-            <li>The top performing player is highlighted</li>
+            <li>
+              The most magnificent player is highlighted with a gold border and
+              card back
+            </li>
           </InfoPopover>
         </PopoverContent>
       </Popover>

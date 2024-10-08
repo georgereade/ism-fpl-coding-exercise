@@ -2,7 +2,11 @@ import { Card, CardFooter, Image, CardHeader } from "@nextui-org/react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import styled from "styled-components";
-import { IconBallFootball, IconSoccerField } from "@tabler/icons-react";
+import {
+  IconBallFootball,
+  IconSoccerField,
+  IconStarFilled,
+} from "@tabler/icons-react";
 
 // Type assignments for player card data
 interface PlayerCardProps {
@@ -26,6 +30,7 @@ const CardContainer = styled.h1`
   border-radius: 0.75rem;
   margin-left: 0.25rem;
   margin-right: 0.25rem;
+  user-select: none;
   @media (min-width: 640px) {
     width: 150px;
     height: 170px;
@@ -115,6 +120,18 @@ export default function PlayerCard({
                 <p>{getTeamName(player.team_code)}</p>
               </div>
             </CardHeader>
+            {highestMagnificence && (
+              <IconStarFilled
+                size={25}
+                color="gold"
+                style={{
+                  marginLeft: "0.5rem",
+                  position: "fixed",
+                  top: "30%",
+                  right: "10%",
+                }}
+              />
+            )}
             <Image
               className="player-image"
               alt={player.web_name}
