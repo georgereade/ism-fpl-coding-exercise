@@ -1,8 +1,10 @@
 import { Card, CardFooter, Image, CardHeader } from "@nextui-org/react";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import styled from "styled-components";
 import { IconBallFootball, IconSoccerField } from "@tabler/icons-react";
 
+// Type assignments for player card data
 interface PlayerCardProps {
   player: {
     web_name: string;
@@ -13,18 +15,57 @@ interface PlayerCardProps {
     team_code: number;
   };
   teamData: { code: number; name: string }[];
-  isMagnificent: boolean;
+  highestMagnificence: boolean;
 }
+
+const CardContainer = styled.h1`
+  position: relative;
+  width: 100px;
+  height: 130px;
+  cursor: pointer;
+  border-radius: 0.75rem;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  @media (min-width: 640px) {
+    width: 150px;
+    height: 170px;
+  }
+  @media (min-width: 768px) {
+    width: 190px;
+    height: 190px;
+  }
+`;
+
+const CardFront = styled.h1`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+`;
+
+const CardBack = styled.h1`
+  transform: rotateX(180deg);
+  backface-visibility: hidden;
+  @media (min-width: 640px) {
+    width: 150px;
+    height: 170px;
+  }
+  @media (min-width: 768px) {
+    width: 190px;
+    height: 190px;
+  }
+`;
 
 export default function PlayerCard({
   player,
   teamData,
-  isMagnificent,
+  highestMagnificence,
 }: PlayerCardProps) {
   const [flippedCards, setFlippedCards] = useState<{ [key: string]: boolean }>(
     {}
   );
 
+  // Identify which card has been clicked and handle click
   const handleCardClick = (playerCode: number) => {
     setFlippedCards((prev) => ({
       ...prev,
@@ -32,6 +73,7 @@ export default function PlayerCard({
     }));
   };
 
+  // Convert elementType code to position name
   const getPosition = (elementType: number) => {
     const positions: { [key: number]: string } = {
       1: "Goalkeeper",
@@ -42,85 +84,80 @@ export default function PlayerCard({
     return positions[elementType] || "Unknown";
   };
 
+  // Convert teamCode to team name
   const getTeamName = (teamCode: number) => {
     const team = teamData.find((team) => team.code === teamCode);
     return team ? team.name : "Unknown Team";
   };
 
   return (
-    <div
-      className="relative w-[120px] h-[150px] sm:w-[150px] sm:h-[170px] md:w-[200px] md:h-[200px] cursor-pointer rounded-xl hover:scale-105 transition ease-linear mx-1"
-      onClick={() => handleCardClick(player.code)}
+    <CardContainer
+      onClick={() => handleCardClick(player.code)} // Passes player code on click
     >
+      {/* Framer motion element to handle flip animation */}
       <motion.div
-        className="absolute w-full h-full"
         animate={{ rotateX: flippedCards[player.code] ? 180 : 0 }}
-        transition={{ duration: 0.6 }}
-        style={{ transformStyle: "preserve-3d" }}
+        whileHover={{ boxShadow: "0 0 10px 3px gold" }}
+        transition={{ duration: 0.3 }}
+        style={{ borderRadius: "1rem", transformStyle: "preserve-3d" }}
       >
-        {/* Front Side */}
-        <div
-          className={`absolute w-full rounded-xl h-full backface-hidden ${
-            isMagnificent ? "shadow-xl shadow-amber-400" : ""
-          }`}
-          style={{ backfaceVisibility: "hidden" }}
-        >
-          <Card className="flex flex-col h-full items-center bg-white shadow-2xl rounded-xl">
-            <CardHeader className="flex flex-col w-full px-2 font-bold">
-              <p className="uppercase text-sm sm:text-base">
-                {player.web_name}
-              </p>
-              <div className="text-xs w-full sm:justify-between sm:flex flex-col sm:flex-row">
-                <p className="px-1 rounded-md text-lightblue bg-darkblue rounded-t-none w-fit">
-                  {getPosition(player.element_type)}
-                </p>{" "}
+        {/* Front side */}
+        <CardFront>
+          <Card
+            className={`card rounded white-bg ${
+              highestMagnificence ? "highest-magnificence" : ""
+            }`}
+          >
+            <CardHeader className="card-header">
+              <p className="player-name center">{player.web_name}</p>
+              <div className="team-and-position">
+                <p className="position">{getPosition(player.element_type)}</p>{" "}
                 <p>{getTeamName(player.team_code)}</p>
               </div>
             </CardHeader>
             <Image
-              className="object-cover h-[80px] sm:h-[120px] md:h-[150px]"
+              className="player-image"
               alt={player.web_name}
               width="auto"
+              draggable="false"
+              // fetches relevant player image with player code
               src={
                 "https://resources.premierleague.com/premierleague/photos/players/110x140/p" +
                 player.code +
                 ".png"
               }
             />
-            <CardFooter className="px-0 z-10 -translate-y-1 md:-translate-y-3 text-center w-full justify-center bg-orange-600 rounded-xl rounded-t-none">
-              <p className="text-black ">
-                <span className="text-white text-xs md:text-base font-bold">
+            <CardFooter className="card-footer rounded">
+              <p>
+                <span className="magnificence white">
                   {player.goals_scored + player.assists} Magnificence
                 </span>
               </p>
             </CardFooter>
           </Card>
-        </div>
+        </CardFront>
 
-        {/* Back Side */}
-        <div
-          className="relative w-[120px] h-[150px] sm:w-[150px] sm:h-[170px] md:w-[200px] md:h-[200px] rounded-md backface-hidden"
-          style={{ transform: "rotateX(180deg)", backfaceVisibility: "hidden" }}
-        >
+        {/* Back side */}
+        <CardBack>
           <Card
-            className={`h-full w-full bg-gray-800 text-white shadow-2xl rounded-xl flex flex-col justify-center my-auto ${
-              isMagnificent ? "bg-amber-400 " : ""
+            className={`card card-back rounded white grey-bg ${
+              highestMagnificence ? "highest-magnificence-back-face " : ""
             }"`}
           >
-            <CardFooter className="px-2 text-center flex flex-col place-content-center items-center justify-center">
+            <CardFooter className="card-footer-back">
               <p>
-                <IconBallFootball className="mx-auto text-white" size={40} />
+                <IconBallFootball className="center white icon" />
                 {player.goals_scored} Goals
               </p>
 
               <p>
-                <IconSoccerField className="mx-auto text-white" size={40} />
+                <IconSoccerField className="center white icon" />
                 {player.assists} Assists
               </p>
             </CardFooter>
           </Card>
-        </div>
+        </CardBack>
       </motion.div>
-    </div>
+    </CardContainer>
   );
 }

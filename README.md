@@ -1,3 +1,15 @@
+This app fetches player and team data from the Fantasy Premier League API to determine which are the top performing 7 players of the season so far.
+It uses a metric called Magnificence which is a combined total of goals and assits.
+
+The team is limited to a formation of 1 goalkeeper, 2 defenders, 3 midfielders and 1 striker.
+In the event of a tie, goals are prioritised.
+
+Player cards can be clicked to reveal the breakdown of goals + assists, and the top performing player is highlighted in gold.
+
+Instructions on running the app are below:
+
+---
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
