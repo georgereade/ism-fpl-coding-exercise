@@ -6,7 +6,8 @@ const afacad = Afacad({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "FPL's Magnificent 7",
-  description: "How have been the stars of the season so far?",
+  description:
+    "Who have been the stars of the Fantasy Premier League season so far?",
 };
 
 export default function RootLayout({
