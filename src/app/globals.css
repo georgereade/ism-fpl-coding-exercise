@@ -3,13 +3,14 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
   background-image: url("/pitch.svg");
-  background-position-x: center;
+  background-position: center;
   background-color: #171717;
+  background-repeat: no-repeat;
+  background-size: 192vw auto;
 }
 
 .white {
@@ -118,7 +119,7 @@ body {
 }
 
 .magnificence {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: bold;
 }
 
@@ -161,10 +162,17 @@ body {
     height: 50px;
     width: 50px;
   }
+  .magnificence {
+    font-size: medium;
+  }
+  body {
+    background-size: 180vw auto;
+    background-position: center top;
+  }
 }
 
 @media (min-width: 768px) {
-  /* Medium screen breakpoint */
+  /*Medium screen breakpoint */
   .team-and-position {
     font-size: 1rem;
   }
@@ -175,16 +183,20 @@ body {
     transform: translateY(-0.75rem);
     width: 190px;
   }
+  .magnificence {
+    font-size: large;
+  }
+  body {
+    background-size: 150vw auto;
+    background-position: top;
+  }
 }
 
-@media screen and (max-width: 1000px) {
-  /* Large screens only */
-  html,
+@media screen and (min-width: 1000px) {
+  /* Large screen breakpoint */
   body {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 100%;
+    background-position: top;
+    background-size: 130vw auto;
   }
 }
 

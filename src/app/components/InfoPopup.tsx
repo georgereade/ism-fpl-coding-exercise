@@ -6,15 +6,17 @@ const InfoContainer = styled.div`
   color: #ea580c;
   cursor: pointer;
   position: fixed;
-  top: 30px;
+  top: 20px;
   left: 20px;
+  scale: 130%;
 
   &:hover {
     scale: 105%;
   }
-  @media (min-width: 768px) {
+  @media (min-width: 640px) {
     top: 50px;
     left: 50px;
+    scale: 100%;
   }
 `;
 
@@ -30,7 +32,7 @@ const InfoPopover = styled.div`
 export default function InfoPopup() {
   return (
     <InfoContainer>
-      <Popover placement="right-start">
+      <Popover placement="bottom-start">
         {/* Loads popover info when icon is clicked */}
         <PopoverTrigger>
           <IconInfoCircleFilled className="icon" role="button" />
@@ -50,6 +52,7 @@ export default function InfoPopup() {
               midfielders and one forward
             </li>
             <li>Tap the player card to show goal and assist totals</li>
+            <li>The top performing player is highlighted</li>
           </InfoPopover>
         </PopoverContent>
       </Popover>

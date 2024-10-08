@@ -28,7 +28,6 @@ const Wrapper = styled.main`
   justify-content: center;
   width: 100vw;
   min-height: 100vh;
-  place-content: center;
 `;
 
 const MainContainer = styled.div`
@@ -86,7 +85,7 @@ const PlayerSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  min-height: 90vh;
+  min-height: 70%;
   justify-content: space-around;
 `;
 
