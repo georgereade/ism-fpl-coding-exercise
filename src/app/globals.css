@@ -11,6 +11,7 @@ body {
   background-color: #171717;
   background-repeat: no-repeat;
   background-size: 192vw auto;
+  font-family: "Arial", sans-serif; /* fallback font in case Afacad doesn't load*/
 }
 
 .white {
