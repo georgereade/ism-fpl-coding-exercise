@@ -163,7 +163,7 @@ export default function Home() {
         {!loaded ? (
           // Shows welcome section if player data not loaded
           <WelcomeSection>
-            <Title>Welcome to FPL's Magnificent Seven </Title>
+            <Title>Welcome to FPL&apos;s Magnificent Seven</Title>
 
             <LoadPlayersButton
               onClick={fetchTeamsData}
