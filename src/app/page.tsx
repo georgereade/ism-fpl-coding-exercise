@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useState, useCallback } from "react";
 import PlayerCard from "./components/PlayerCard";
 import Info from "./components/InfoPopup";
+import { SpinningCircles } from "react-loading-icons";
 
 // Instructs typescript on what types to expect for the Player and Team objects
 interface Player {
@@ -64,6 +65,9 @@ const LoadPlayersButton = styled.button`
   margin: auto;
   margin-top: 10px;
   width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
     transform: scale(102%);
@@ -94,9 +98,7 @@ export default function Home() {
   const [playerData, setPlayerData] = useState<Player[]>([]);
   const [teamData, setTeamData] = useState<Team[]>([]);
   const [loaded, setLoaded] = useState(false);
-  const [buttonLabel, setButtonLabel] = useState(
-    "Reveal the stars of the season!"
-  );
+  const [isLoading, setIsLoading] = useState(false);
 
   const sortPlayersByGoalsAndAssists = (players: Player[]) => {
     return players.sort((a, b) => {
@@ -115,7 +117,7 @@ export default function Home() {
 
   const fetchTeamsData = useCallback(() => {
     // Sets button text to indicate loading
-    setButtonLabel("Loading...");
+    setIsLoading(true);
 
     fetch("https://cors-proxy-90954623675.europe-west1.run.app/", {
       method: "GET",
@@ -139,7 +141,7 @@ export default function Home() {
       })
       .catch((error) => {
         console.error("There was an issue with the fetch:", error);
-        setButtonLabel("Reveal the stars of the season!"); // Reset button text on error
+        setIsLoading(false);
       });
   }, []);
 
@@ -163,11 +165,17 @@ export default function Home() {
         <WelcomeSection>
           <Title>Welcome to FPL&apos;s Magnificent Seven</Title>
 
-          <LoadPlayersButton
-            onClick={fetchTeamsData}
-            disabled={buttonLabel === "Loading..."}
-          >
-            {buttonLabel}
+          <LoadPlayersButton onClick={fetchTeamsData} disabled={isLoading}>
+            {isLoading ? (
+              <SpinningCircles
+                stroke="#ea580c"
+                fill="#1f2937"
+                width="full"
+                height="30"
+              />
+            ) : (
+              "Reveal the stars of the season!"
+            )}
           </LoadPlayersButton>
         </WelcomeSection>
       ) : (
