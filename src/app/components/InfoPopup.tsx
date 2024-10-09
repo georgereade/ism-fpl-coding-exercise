@@ -24,6 +24,9 @@ const InfoPopover = styled.div`
   padding: 12px;
   font-size: medium;
   line-height: 200%;
+  @media (min-width: 640px) {
+    font-size: large;
+  }
 `;
 
 export default function InfoPopup() {
