@@ -37,13 +37,15 @@ export default function InfoPopup() {
           <InfoPopover>
             <li>Magnificence = Goals + Assists</li>
             <li>
-              The formation is 1 goalkeeper - 2 defenders - 3 midfielders - 1
-              forward
+              In the event of a tie, players with more goals are displayed
             </li>
-            <li>In the event of a tie, players with more goals win</li>
+            <li>
+              The formation is fixed to 1 goalkeeper - 2 defenders - 3
+              midfielders - 1 forward
+            </li>
             <li>Tap the player cards to show goal and assist totals</li>
             <li>
-              The most magnificent player is highlighted with a star and gold
+              The most magnificent player is highlighted with a star and orange
               border
             </li>
           </InfoPopover>

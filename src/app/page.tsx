@@ -60,6 +60,7 @@ const LoadPlayersButton = styled.button`
   border-radius: 4px;
   cursor: pointer;
   font-size: larger;
+  font-weight: bold;
   padding: 8px;
   background-color: white;
   margin: auto;

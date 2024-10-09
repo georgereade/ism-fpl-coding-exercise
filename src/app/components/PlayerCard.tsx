@@ -70,7 +70,7 @@ const CardBack = styled.div`
 
 const CardFooterFront = styled(CardFooter)`
   backface-visibility: hidden;
-  -webkit-backface-visibility: hidden; /* For Safari */
+  -webkit-backface-visibility: hidden; /* Safari compatibility */
   padding-left: 0;
   padding-right: 0;
   z-index: 10;
@@ -85,7 +85,7 @@ const CardFooterFront = styled(CardFooter)`
 
 const CardFooterBack = styled(CardFooter)`
   backface-visibility: hidden;
-  -webkit-backface-visibility: hidden; /* For Safari */
+  -webkit-backface-visibility: hidden; /* Safari compatibility */
   padding-left: 0.5rem;
   padding-right: 0.5rem;
   text-align: center;
