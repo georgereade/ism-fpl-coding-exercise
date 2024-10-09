@@ -68,6 +68,16 @@ const CardBack = styled.div`
   }
 `;
 
+const CardFooterFront = styled(CardFooter)`
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden; /* For Safari */
+`;
+
+const CardFooterBack = styled(CardFooter)`
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden; /* For Safari */
+`;
+
 export default function PlayerCard({
   player,
   teamData,
@@ -140,13 +150,13 @@ export default function PlayerCard({
                 ".png"
               }
             />
-            <CardFooter className="card-footer rounded">
+            <CardFooterFront className="card-footer rounded">
               <p>
                 <span className="magnificence white">
                   {player.goals_scored + player.assists} Magnificence
                 </span>
               </p>
-            </CardFooter>
+            </CardFooterFront>
           </Card>
         </CardFront>
 
@@ -157,17 +167,16 @@ export default function PlayerCard({
               isHighestMagnificence ? "highest-magnificence-back-face " : ""
             }"`}
           >
-            <CardFooter className="card-footer-back">
+            <CardFooterBack className="card-footer-back">
               <p>
                 <IconBallFootball className="center white icon" />
                 {player.goals_scored} Goals
               </p>
-
               <p>
                 <IconSoccerField className="center white icon" />
                 {player.assists} Assists
               </p>
-            </CardFooter>
+            </CardFooterBack>
           </Card>
         </CardBack>
       </MotionCard>
