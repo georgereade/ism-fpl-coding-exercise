@@ -174,7 +174,7 @@ export default function Home() {
                 height="30"
               />
             ) : (
-              "Reveal the stars of the season!"
+              "REVEAL TEAM"
             )}
           </LoadPlayersButton>
         </WelcomeSection>

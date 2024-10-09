@@ -22,11 +22,8 @@ const InfoContainer = styled.div`
 
 const InfoPopover = styled.div`
   padding: 12px;
-  font-size: small;
+  font-size: medium;
   line-height: 200%;
-  @media (min-width: 768px) {
-    font-size: medium;
-  }
 `;
 
 export default function InfoPopup() {
@@ -38,22 +35,16 @@ export default function InfoPopup() {
         </PopoverTrigger>
         <PopoverContent className="grey-bg white rounded">
           <InfoPopover>
+            <li>Magnificence = Goals + Assists</li>
             <li>
-              Magnificence is determined by calculating combined goals and
-              assists
+              The formation is 1 goalkeeper - 2 defenders - 3 midfielders - 1
+              forward
             </li>
+            <li>In the event of a tie, players with more goals win</li>
+            <li>Tap the player cards to show goal and assist totals</li>
             <li>
-              In the event of a tie, players with more goals are prioritised
-              over assists
-            </li>
-            <li>
-              The formation is fixed to one goalkeeper, two defenders, three
-              midfielders and one forward
-            </li>
-            <li>Tap the player card to show goal and assist totals</li>
-            <li>
-              The most magnificent player is highlighted with a gold border and
-              card back
+              The most magnificent player is highlighted with a star and gold
+              border
             </li>
           </InfoPopover>
         </PopoverContent>

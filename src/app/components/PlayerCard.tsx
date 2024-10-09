@@ -43,6 +43,7 @@ const CardContainer = styled.section`
 const MotionCard = styled(motion.div)`
   border-radius: 1rem;
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d; /* Safari compatibility */
 `;
 
 const CardFront = styled.div`
@@ -50,11 +51,13 @@ const CardFront = styled.div`
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden; /* Safari compatibility */
 `;
 
 const CardBack = styled.div`
   transform: rotateX(180deg);
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden; /* Safari compatibility */
   @media (min-width: 640px) {
     width: 150px;
     height: 170px;
