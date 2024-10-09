@@ -71,11 +71,29 @@ const CardBack = styled.div`
 const CardFooterFront = styled(CardFooter)`
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden; /* For Safari */
+  padding-left: 0;
+  padding-right: 0;
+  z-index: 10;
+  transform: translateY(-0.7rem);
+  text-align: center;
+  width: 100px;
+  justify-content: center;
+  background-color: #ea580c;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 `;
 
 const CardFooterBack = styled(CardFooter)`
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden; /* For Safari */
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 130px;
 `;
 
 export default function PlayerCard({
@@ -150,7 +168,7 @@ export default function PlayerCard({
                 ".png"
               }
             />
-            <CardFooterFront className="card-footer rounded">
+            <CardFooterFront className="rounded">
               <p>
                 <span className="magnificence white">
                   {player.goals_scored + player.assists} Magnificence
@@ -167,7 +185,7 @@ export default function PlayerCard({
               isHighestMagnificence ? "highest-magnificence-back-face " : ""
             }"`}
           >
-            <CardFooterBack className="card-footer-back">
+            <CardFooterBack>
               <p>
                 <IconBallFootball className="center white icon" />
                 {player.goals_scored} Goals

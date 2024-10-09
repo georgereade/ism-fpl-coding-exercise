@@ -91,30 +91,6 @@ body {
   height: 60px;
 }
 
-.card-footer {
-  padding-left: 0;
-  padding-right: 0;
-  z-index: 10;
-  transform: translateY(-0.7rem);
-  text-align: center;
-  width: 100px;
-  justify-content: center;
-  background-color: #ea580c;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
-.card-footer-back {
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 130px;
-}
-
 .magnificence {
   font-size: 0.8rem;
   font-weight: bold;
