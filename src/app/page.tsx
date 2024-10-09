@@ -170,7 +170,7 @@ export default function Home() {
               <SpinningCircles
                 stroke="#ea580c"
                 fill="#1f2937"
-                width="full"
+                width="30"
                 height="30"
               />
             ) : (
