@@ -129,11 +129,6 @@ body {
   .player-image {
     height: 100px;
   }
-  .card-footer {
-    width: 150px;
-    height: 170px;
-    transform: translateY(-0);
-  }
   .icon {
     height: 50px;
     width: 50px;
@@ -154,10 +149,6 @@ body {
   }
   .player-image {
     height: 130px;
-  }
-  .card-footer {
-    transform: translateY(-0.75rem);
-    width: 190px;
   }
   .magnificence {
     font-size: large;

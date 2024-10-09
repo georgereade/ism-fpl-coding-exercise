@@ -76,11 +76,18 @@ const CardFooterFront = styled(CardFooter)`
   z-index: 10;
   transform: translateY(-0.7rem);
   text-align: center;
-  width: 100px;
+  width: 100%;
   justify-content: center;
   background-color: #ea580c;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+  @media (min-width: 640px) {
+    height: 170px;
+    transform: translateY(-0);
+  }
+  @media (min-width: 768px) {
+    transform: translateY(-0.75rem);
+  }
 `;
 
 const CardFooterBack = styled(CardFooter)`
