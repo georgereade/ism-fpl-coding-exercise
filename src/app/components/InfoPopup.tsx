@@ -11,7 +11,7 @@ const InfoContainer = styled.div`
   scale: 130%;
 
   &:hover {
-    scale: 105%;
+    transform: scale(105%);
   }
   @media (min-width: 640px) {
     top: 50px;
@@ -33,7 +33,6 @@ export default function InfoPopup() {
   return (
     <InfoContainer>
       <Popover placement="bottom-start">
-        {/* Loads popover info when icon is clicked */}
         <PopoverTrigger>
           <IconInfoCircleFilled className="icon" role="button" />
         </PopoverTrigger>

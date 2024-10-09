@@ -19,17 +19,16 @@ interface PlayerCardProps {
     team_code: number;
   };
   teamData: { code: number; name: string }[];
-  highestMagnificence: boolean;
+  isHighestMagnificence: boolean;
 }
 
-const CardContainer = styled.h1`
+const CardContainer = styled.section`
   position: relative;
   width: 100px;
   height: 130px;
   cursor: pointer;
   border-radius: 0.75rem;
-  margin-left: 0.25rem;
-  margin-right: 0.25rem;
+  margin: 0 0.25rem;
   user-select: none;
   @media (min-width: 640px) {
     width: 150px;
@@ -41,14 +40,19 @@ const CardContainer = styled.h1`
   }
 `;
 
-const CardFront = styled.h1`
+const MotionCard = styled(motion.div)`
+  border-radius: 1rem;
+  transform-style: preserve-3d;
+`;
+
+const CardFront = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
 `;
 
-const CardBack = styled.h1`
+const CardBack = styled.div`
   transform: rotateX(180deg);
   backface-visibility: hidden;
   @media (min-width: 640px) {
@@ -64,13 +68,12 @@ const CardBack = styled.h1`
 export default function PlayerCard({
   player,
   teamData,
-  highestMagnificence,
+  isHighestMagnificence,
 }: PlayerCardProps) {
   const [flippedCards, setFlippedCards] = useState<{ [key: string]: boolean }>(
     {}
   );
 
-  // Identify which card has been clicked and handle click
   const handleCardClick = (playerCode: number) => {
     setFlippedCards((prev) => ({
       ...prev,
@@ -100,17 +103,16 @@ export default function PlayerCard({
       onClick={() => handleCardClick(player.code)} // Passes player code on click
     >
       {/* Framer motion element to handle flip animation */}
-      <motion.div
+      <MotionCard
         animate={{ rotateX: flippedCards[player.code] ? 180 : 0 }}
         whileHover={{ boxShadow: "0 0 10px 3px gold" }}
         transition={{ duration: 0.3 }}
-        style={{ borderRadius: "1rem", transformStyle: "preserve-3d" }}
       >
         {/* Front side */}
         <CardFront>
           <Card
             className={`card rounded white-bg ${
-              highestMagnificence ? "highest-magnificence" : ""
+              isHighestMagnificence ? "highest-magnificence" : ""
             }`}
           >
             <CardHeader className="card-header">
@@ -120,24 +122,15 @@ export default function PlayerCard({
                 <p>{getTeamName(player.team_code)}</p>
               </div>
             </CardHeader>
-            {highestMagnificence && (
-              <IconStarFilled
-                size={25}
-                color="gold"
-                style={{
-                  marginLeft: "0.5rem",
-                  position: "fixed",
-                  top: "30%",
-                  right: "10%",
-                }}
-              />
+            {isHighestMagnificence && (
+              <IconStarFilled size={25} color="gold" id="star-icon" />
             )}
             <Image
               className="player-image"
               alt={player.web_name}
               width="auto"
               draggable="false"
-              // fetches relevant player image with player code
+              // fetches relevant player image using player code
               src={
                 "https://resources.premierleague.com/premierleague/photos/players/110x140/p" +
                 player.code +
@@ -158,7 +151,7 @@ export default function PlayerCard({
         <CardBack>
           <Card
             className={`card card-back rounded white grey-bg ${
-              highestMagnificence ? "highest-magnificence-back-face " : ""
+              isHighestMagnificence ? "highest-magnificence-back-face " : ""
             }"`}
           >
             <CardFooter className="card-footer-back">
@@ -174,7 +167,7 @@ export default function PlayerCard({
             </CardFooter>
           </Card>
         </CardBack>
-      </motion.div>
+      </MotionCard>
     </CardContainer>
   );
 }

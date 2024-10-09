@@ -1,7 +1,7 @@
 "use client"; // styled-components requires client side rendering
 
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import PlayerCard from "./components/PlayerCard";
 import Info from "./components/InfoPopup";
 
@@ -20,21 +20,14 @@ interface Team {
   name: string;
 }
 
-// styling for each styled-components element
-const Wrapper = styled.main`
+const AppContainer = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100vw;
-  min-height: 100vh;
-`;
-
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
   gap: 1rem;
   width: 100%;
+  min-height: 100vh;
   @media (min-width: 640px) {
     width: 85%;
   }
@@ -73,7 +66,7 @@ const LoadPlayersButton = styled.button`
   width: 300px;
 
   &:hover {
-    scale: 102%;
+    transform: scale(102%);
     transition: ease-in-out;
     transition-duration: 0.1s;
     background-color: #ea580c;
@@ -81,16 +74,18 @@ const LoadPlayersButton = styled.button`
   }
 `;
 
-const PlayerSection = styled.div`
+const PlayerSection = styled.section`
   display: flex;
   flex-direction: column;
   gap: 1rem;
   min-height: 70%;
   justify-content: space-around;
+  width: 100%;
 `;
 
 const PlayerRow = styled.div`
   display: flex;
+  width: 100%;
   justify-content: space-around;
 `;
 
@@ -99,12 +94,10 @@ export default function Home() {
   const [playerData, setPlayerData] = useState<Player[]>([]);
   const [teamData, setTeamData] = useState<Team[]>([]);
   const [loaded, setLoaded] = useState(false);
-  // Default button text
-  const [buttonText, setButtonText] = useState(
+  const [buttonLabel, setButtonLabel] = useState(
     "Reveal the stars of the season!"
   );
 
-  // Function to sort players by goals + assists. If tied, the player with more goals wins
   const sortPlayersByGoalsAndAssists = (players: Player[]) => {
     return players.sort((a, b) => {
       const aTotal = a.goals_scored + a.assists;
@@ -120,10 +113,9 @@ export default function Home() {
     });
   };
 
-  // Fetch function triggered by button press
-  const fetchTeamsData = () => {
-    // Sets button text to Loading
-    setButtonText("Loading...");
+  const fetchTeamsData = useCallback(() => {
+    // Sets button text to indicate loading
+    setButtonLabel("Loading...");
 
     fetch("https://cors-proxy-90954623675.europe-west1.run.app/", {
       method: "GET",
@@ -139,113 +131,66 @@ export default function Home() {
         return response.json();
       })
       .then((data) => {
-        const sortedPlayerData = sortPlayersByGoalsAndAssists(data.elements); // Sort players by goals and assists
+        const sortedPlayerData = sortPlayersByGoalsAndAssists(data.elements);
 
         setPlayerData(sortedPlayerData); // Store the sorted player data
         setTeamData(data.teams); // Store team data
-        setLoaded(true); // Indicate that data is loaded
+        setLoaded(true); // Indicate that data is loaded to trigger player cards
       })
       .catch((error) => {
         console.error("There was an issue with the fetch:", error);
-        setButtonText("Reveal the stars of the season!"); // Reset button text on error
+        setButtonLabel("Reveal the stars of the season!"); // Reset button text on error
       });
-  };
+  }, []);
 
   // Calculate the player with the highest magnificence
   const maxMagnificence = Math.max(
     ...playerData.map((player) => player.goals_scored + player.assists)
   );
+
+  const playerRowsConfig = [
+    { elementType: 1, limit: 1 }, // Goalkeepers
+    { elementType: 2, limit: 2 }, // Defenders
+    { elementType: 3, limit: 3 }, // Midfielders
+    { elementType: 4, limit: 1 }, // Forwards
+  ];
+
   return (
-    <Wrapper>
-      <MainContainer>
-        <Info />
-        {!loaded ? (
-          // Shows welcome section if player data not loaded
-          <WelcomeSection>
-            <Title>Welcome to FPL&apos;s Magnificent Seven</Title>
+    <AppContainer>
+      <Info />
+      {!loaded ? (
+        // Shows welcome section until data loaded
+        <WelcomeSection>
+          <Title>Welcome to FPL&apos;s Magnificent Seven</Title>
 
-            <LoadPlayersButton
-              onClick={fetchTeamsData}
-              disabled={buttonText === "Loading..."}
-            >
-              {buttonText}
-            </LoadPlayersButton>
-          </WelcomeSection>
-        ) : (
-          // Player section loaded after button is clicked
-          <PlayerSection>
-            <>
-              {/* Row for Goalkeeper */}
-              <PlayerRow className="one-player">
-                {playerData
-                  .filter((player) => player.element_type === 1) // Filter on element type of 1 (goalkeepers)
-                  .slice(0, 1) // Limit to 1 player
-                  .map((player) => (
-                    <PlayerCard
-                      key={player.code}
-                      player={player}
-                      teamData={teamData}
-                      highestMagnificence={
-                        player.goals_scored + player.assists === maxMagnificence
-                      }
-                    />
-                  ))}
-              </PlayerRow>
-
-              {/* Row for Defenders */}
-              <PlayerRow className="two-players">
-                {playerData
-                  .filter((player) => player.element_type === 2) // Filter on element type of 2 (defenders)
-                  .slice(0, 2) // Limit to 2 players
-                  .map((player) => (
-                    <PlayerCard
-                      key={player.code}
-                      player={player}
-                      teamData={teamData}
-                      highestMagnificence={
-                        player.goals_scored + player.assists === maxMagnificence
-                      }
-                    />
-                  ))}
-              </PlayerRow>
-
-              {/* Row for Midfielders */}
-              <PlayerRow className="three-players">
-                {playerData
-                  .filter((player) => player.element_type === 3) // Filter on element type of 3 (midfielders)
-                  .slice(0, 3) // Limit to 3 players
-                  .map((player) => (
-                    <PlayerCard
-                      key={player.code}
-                      player={player}
-                      teamData={teamData}
-                      highestMagnificence={
-                        player.goals_scored + player.assists === maxMagnificence
-                      }
-                    />
-                  ))}
-              </PlayerRow>
-
-              {/* Row for Forward */}
-              <PlayerRow className="one-player">
-                {playerData
-                  .filter((player) => player.element_type === 4) // Filter on element type of 4 (forward)
-                  .slice(0, 1) // Limit to 1 player
-                  .map((player) => (
-                    <PlayerCard
-                      key={player.code}
-                      player={player}
-                      teamData={teamData}
-                      highestMagnificence={
-                        player.goals_scored + player.assists === maxMagnificence
-                      }
-                    />
-                  ))}
-              </PlayerRow>
-            </>
-          </PlayerSection>
-        )}
-      </MainContainer>
-    </Wrapper>
+          <LoadPlayersButton
+            onClick={fetchTeamsData}
+            disabled={buttonLabel === "Loading..."}
+          >
+            {buttonLabel}
+          </LoadPlayersButton>
+        </WelcomeSection>
+      ) : (
+        <PlayerSection>
+          {playerRowsConfig.map(({ elementType, limit }) => (
+            <PlayerRow key={elementType}>
+              {playerData
+                .filter((player) => player.element_type === elementType) // Filter on player position
+                .slice(0, limit) // Limit to correct number per position
+                .map((player) => (
+                  <PlayerCard
+                    key={player.code}
+                    player={player}
+                    teamData={teamData}
+                    isHighestMagnificence={
+                      player.goals_scored + player.assists === maxMagnificence
+                    }
+                  />
+                ))}
+            </PlayerRow>
+          ))}
+        </PlayerSection>
+      )}
+    </AppContainer>
   );
 }
